@@ -1,3 +1,4 @@
+#lab 11class
 library(MASS)
 
 boxplot(Auto$mpg)
