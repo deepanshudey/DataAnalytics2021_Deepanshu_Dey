@@ -1,3 +1,4 @@
+
 library(MASS)
 
 boxplot(Auto$mpg)
@@ -88,29 +89,28 @@ hist(E)
 
 print(getwd())
 
-data2 <- read.csv("2010EPI_data",skip=1,header = T)
+data2 <- read.csv("2010EPI_data.csv",skip=1,header = T)
 View(data2)
 attach(data2)
 str(data2)
 EPI
 DALY
-data2$EPI
 
+#Remove NA
+tf <- is.na(data2)
+data2 <- data2[!tf] 
 
-tf <- is.na(EPI)
-EPI1 <- EPI[!tf] 
-EPI1
 
 fix(data2)
 hist(EPI1)
 
-
+#summary
 summary(EPI)
 
 
 fivenum(EPI,na.rm=TRUE)
-pdf(file = 'Plots1.pdf' )
-
+#pdf(file = 'Plots1.pdf' )
+#histogram
 hist(EPI, seq(30., 95., 1.0), prob=TRUE)
 
 lines(density(EPI,na.rm=TRUE,bw=1.)) 
@@ -121,7 +121,7 @@ plot(ecdf(EPI), do.points=FALSE, verticals=TRUE)
 
 
 par(pty="s") 
-
+#quantile plots
 qqline(EPI)
 qqnorm(EPI)
 
@@ -150,7 +150,7 @@ dev.off()
 
 
 EPILand<-EPI[!Landlock]
-pdf(file = 'Plots2.pdf' )
+#pdf(file = 'Plots2.pdf' )
 
 Eland <- EPILand[!is.na(EPILand)]
 hist(Eland)
@@ -162,4 +162,61 @@ summary(Eland)
 fivenum(Eland,na.rm=TRUE)
 
 
+EPIRegion_Carribean <- data1[data1$GEO_subregion %in% c('Caribbean'),]
+print(EPIRegion_Carribean)
+
+EPIRegion_Asia <- data2[data2$EPI_regions %in% c('South Asia'),]
+print(EPIRegion_Asia)
+
+
+data3 <- read.csv("2010EPI_data",skip=1,header = T)
 dev.off()
+
+
+data3 <- read.csv("water-treatment.csv",header = T)
+print(data3)
+
+
+View(data3)
+
+attach(data3)
+
+str(data3)
+summary(data3)
+print(nrow(dfnew))
+#x <- is.na(data3)
+#dfnew[] <- lapply(data3, gsub, pattern="\\?", replacement="")
+data3[data3=="?"]<- NA
+
+dfnew<-na.omit(data3)
+print(dfnew)
+nrow(dfnew)
+
+#summary
+fivenum(dfnew,na.rm=TRUE)
+
+
+#histogram
+hist(dfnew$COND.D)
+View(dfnew)
+
+
+hist(dfnew$SSV.E)
+#quantile plots
+qqline(dfnew$COND.D)
+qqnorm(dfnew$COND.D)
+
+
+
+x<-seq(30,95,1)
+qqplot(qt(ppoints(250), df = 5), x, xlab = "Q-Q plot for t dsn")
+qqline(x)
+
+
+
+
+qqnorm(dfnew$COND.D)
+
+#boxplot
+boxplot(COND.D,COND.P)
+
